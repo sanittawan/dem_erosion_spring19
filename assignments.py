@@ -16,10 +16,15 @@ matrix2 = [[-3, -2, -1 , 0, 0],
           [0, -2, 0, -3, -1],
           [0, -1, -3, 0, -2]]
 
+matrix3 = [[-3,-2,-1,0],
+		   [-3,-2,-1,0],
+		   [-3,-2,-1,0],
+		   [-3,-2,-1,0]]
+
 m = Munkres()
 
-indexes = m.compute(matrix)
-print_matrix(matrix, msg='Lowest cost through this matrix:')
+indexes = m.compute(matrix3)
+print_matrix(matrix3, msg='Lowest cost through this matrix:')
 total = 0
 for row, column in indexes:
     value = matrix[row][column]
