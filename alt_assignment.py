@@ -9,15 +9,16 @@ from random import shuffle
 
 FIRSTNAME = 'first name'
 LASTNAME = 'last name'
-ID = 'id'
-FIRST = 'first choice'
-SECOND = 'second choice'
-THIRD = 'third choice'
-FOURTH = 'fourth choice'
-FIFTH = 'fifth choice'
 PREF = [FIRST, SECOND, THIRD, FOURTH, FIFTH]
 
 def read_process_spreadsheet(filename):
+    ID = 'id'
+    FIRST = 'first choice'
+    SECOND = 'second choice'
+    THIRD = 'third choice'
+    FOURTH = 'fourth choice'
+    FIFTH = 'fifth choice'
+
     students_df = pd.read_csv(filename)
     students_df.drop(columns=['Timestamp'], inplace=True)
     students_df.columns = ['email', FIRSTNAME, LASTNAME, ID, FIRST, 
@@ -27,7 +28,7 @@ def read_process_spreadsheet(filename):
 def read_country_spreadsheet(filename):
     country_df = pd.read_csv(filename)
     country_df.set_index(['country'], inplace=True)
-    country_df['student'] = None
+    country_df['student'] = 0
 
     return country_df
 
@@ -51,15 +52,25 @@ def assign():
             cur_choice = cur_student[PREF[i]]
             if not cur_choice:
                 continue
-            if (assigned_df.loc[cur_choice]['student'] is None) and\
+            if (assigned_df.loc[cur_choice]['student'] == 0) and\
                 cp_students_df[cp_students_df[PREF[i]] == cur_choice].shape[0] == 1:
-                assigned_df.loc[cur_choice].\
-                    replace({None : cur_student[LASTNAME]}, inplace=True)
+                assigned_df.loc[cur_choice] = cur_student[LASTNAME]
                 allocated_students.add(cur_student[LASTNAME])
                 order.remove(j)
                 cp_students_df = cp_students_df.drop([j])
     print(cp_students_df)
     print(assigned_df)
     # deal with students who were not allocated any countries so far
+    unallocated_students = list(cp_students_df[LASTNAME].values)
+    avail_countries = assigned_df[assigned_df['student'] == 0]
+
+    i = 0
+    for ind, _ in avail_countries.iterrows():
+        assigned_df.loc[ind] = unallocated_students[i]
+        i += 1
+    print(assigned_df)
+
+
+
 
 
