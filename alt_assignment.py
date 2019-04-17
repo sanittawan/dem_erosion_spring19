@@ -1,7 +1,7 @@
 '''
 Code for assigning students based on their ranked preferences
 
-This is a draft. Still need to 
+This is a draft. Still need to write to CSV at the end
 
 Author: Nikki Tan
 '''
